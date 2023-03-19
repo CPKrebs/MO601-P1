@@ -1,0 +1,3 @@
+A = NAND B C
+B = AND D E
+C = AND F A
