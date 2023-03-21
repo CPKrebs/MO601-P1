@@ -1,0 +1,6 @@
+A = AND B C
+B = NAND D E
+C = XOR H F
+D = OR G H
+E = NOT H
+F = NOR G I

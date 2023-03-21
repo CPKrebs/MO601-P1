@@ -1,0 +1,2 @@
+A = NAND C B
+B = NAND A D
