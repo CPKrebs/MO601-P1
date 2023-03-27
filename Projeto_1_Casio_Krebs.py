@@ -85,20 +85,19 @@ def atraso_0(DIR,Circuito_0,sinais):
 
 	w.writerow(linha)
 
-	# Inicializa o contador de relógio
-	Tempo = 0
-
-	# Realiza uma primeira passagens pelas portas para verificar 
+	# Realiza uma primeira passagem pelas portas para verificar 
 	# se alguma porta é afetada pelos sinais intermediários
 	for aux in (valido):
 		for portas in (valido):
 			saida = atraso_0_aux(portas,Circuito_0)
 			ID_saida = ord(portas[0])-ord("A")
 			Circuito_0[ID_saida][3] = saida
-	
+
+	# Inicializa o contador de relógio
+	Tempo = 0
 
 	# Inicializa a pilha de variáveis modificadas
-	modificado = []
+	Modificado = []
 
 	for x in sinais:
 		
@@ -109,16 +108,16 @@ def atraso_0(DIR,Circuito_0,sinais):
 			Circuito_0[ID][3]=x[1]
 
 			#Identificando a variável modificada
-			modificado.append(x[0]) 
+			Modificado.append(x[0]) 
 
 		# Avanço no tempo
 		else:
-			while (len(modificado) != 0):
+			while (len(Modificado) != 0):
 
-				sinal_pai = modificado[0]
-				modificado.pop(0);
+				sinal_pai = Modificado[0]
+				Modificado.pop(0);
 
-				# Identica se o sinal modificado é entrada de alguma porta lógica 
+				# Identica se o sinal Modificado é entrada de alguma porta lógica 
 				for portas in (valido):
 					
 					att = False
@@ -138,13 +137,14 @@ def atraso_0(DIR,Circuito_0,sinais):
 
 						if (Circuito_0[ID_saida][3] != saida):
 							Circuito_0[ID_saida][3] = saida
-							# Adicona na pilha de sinais modificados
-							if (portas[0] not in modificado):	
-								modificado.append(portas[0])
+							# Adicona na pilha de sinais Modificados
+							if (portas[0] not in Modificado):	
+								Modificado.append(portas[0])
 
 			print_linha_0(Tempo,w,Circuito_0)
 			Tempo +=1
 	f.close()	
+	
 #########################################################
 #
 #
@@ -199,7 +199,7 @@ def atraso_1(DIR,Circuito_1,sinais):
 				valido.append([Circuito_1[y][2],Circuito_1[y][4],Circuito_1[y][5]])
 	w.writerow(linha)
 
-
+	
 	# Realiza uma primeira passagens pelas portas para verificar 
 	# se alguma porta é afetada pelos sinais intermediários
 	for aux in (valido):
@@ -207,14 +207,14 @@ def atraso_1(DIR,Circuito_1,sinais):
 			saida = atraso_1_aux(portas,Circuito_1)
 			ID_saida = ord(portas[0])-ord("A")
 			Circuito_1[ID_saida][3] = saida
-
+	
 
 	# Inicializa o contador de relógio
 	Tempo = 0
 
 	# Inicializa a pilha de variáveis modificadas
-	modificado = []
-	modificado_filho = []
+	Modificado = []
+	Modificado_filho = []
 
 	for x in sinais:
 		
@@ -225,18 +225,19 @@ def atraso_1(DIR,Circuito_1,sinais):
 			Circuito_1[ID][3]=x[1]
 
 			#Identificando a variável modificada
-			modificado.append(x[0])
+			Modificado.append(x[0])
 
 		# Avanço no tempo
 		else:
+			print(Modificado)
 
 			print_linha_1(Tempo,w,Circuito_1)
 
 			Tempo +=1
-			modificado_filho = []
-			for sinal_pai in (modificado):
+			Modificado_filho = []
+			for sinal_pai in (Modificado):
 
-				# Identica se o sinal modificado é entrada de alguma porta lógica 
+				# Identica se o sinal Modificado é entrada de alguma porta lógica 
 				for portas in (valido):
 
 					att = False
@@ -257,22 +258,22 @@ def atraso_1(DIR,Circuito_1,sinais):
 							Circuito_1[ID_saida][3] = saida
 
 							# Identifica quais são os sinais de saida modificados
-							modificado_filho.append(portas[0])
+							Modificado_filho.append(portas[0])
 			
 			# Adicona os sinais modificanos na piulha para serem 
 			# verificados, no ciclo de clock seguinte
-			modificado = []	
-			for x in modificado_filho:	
-				if (x not in modificado):	
-					modificado.append(x)	
+			Modificado = []	
+			for x in Modificado_filho:	
+				if (x not in Modificado):	
+					Modificado.append(x)	
 
-	while (len(modificado) != 0):
+	while (len(Modificado) != 0):
 
 		print_linha_1(Tempo,w,Circuito_1)
 
 		Tempo +=1
-		modificado_filho = []
-		for sinal_pai in (modificado):
+		Modificado_filho = []
+		for sinal_pai in (Modificado):
 
 			for portas in (valido):
 
@@ -292,12 +293,12 @@ def atraso_1(DIR,Circuito_1,sinais):
 
 					if (Circuito_1[ID_saida][3] != saida):
 						Circuito_1[ID_saida][3] = saida
-						modificado_filho.append(portas[0])
+						Modificado_filho.append(portas[0])
 
-		modificado = []	
-		for x in modificado_filho:	
-			if (x not in modificado):	
-				modificado.append(x)
+		Modificado = []	
+		for x in Modificado_filho:	
+			if (x not in Modificado):	
+				Modificado.append(x)
 	
 	print_linha_1(Tempo,w,Circuito_1)
 	f.close()
@@ -323,104 +324,111 @@ def main():
 			
 	for dir_circ in DIR:
 
-		print (dir_circ)
+		try:
+			#Inicialização histórico dos circuitos
+			Circuito_0 = []
+			Circuito_1 = []
 
-		#Inicialização histórico dos circuitos
-		Circuito_0 = []
-		Circuito_1 = []
+			#Inicialização do circuito
+			for x in range(26):
+				Circuito_0.append([False,False,chr(ord("A")+x),0])
+				Circuito_1.append([False,False,chr(ord("A")+x),0])
 
-		#Inicialização do circuito
-		for x in range(26):
-			Circuito_0.append([False,False,chr(ord("A")+x),0])
-			Circuito_1.append([False,False,chr(ord("A")+x),0])
+			#Inicialização dos sinais de entrada
+			sinais = []
 
-		#Inicialização dos sinais de entrada
-		sinais = []
-
-		sinal_E = []
-		sinal_S = []
-
-
-		# Leitura do circuito
-		f = open(dir_circ[0] + 'circuito.hdl', 'r')
-
-		for line in f:
-			termos = line.split();
-
-			# Leitura sinal de saida
-			ID = ord(termos[0])-ord("A")
-			sinal_S.append(termos[0])
-			if (termos[0] in sinal_E):
-				sinal_E.remove(termos[0])
-
-			# Leitura da porta
-			Circuito_0[ID].append(termos[2])	
-			Circuito_0[ID][0]=True
-			Circuito_0[ID][1]=True
-			Circuito_1[ID].append(termos[2])	
-			Circuito_1[ID][0]=True
-			Circuito_1[ID][1]=True
-
-			# Leitura da primeira entrada
-			Circuito_0[ID].append(termos[3])							
-			Circuito_0[ord(termos[3])-ord("A")][1]=True
-			Circuito_1[ID].append(termos[3])							
-			Circuito_1[ord(termos[3])-ord("A")][1]=True
-			sinal_E.append(termos[3])
-
-			# Leitura condicional da segunda entrada
-			if (termos[2]!= "NOT"): 
-				Circuito_0[ID].append(termos[4])	
-				Circuito_0[ord(termos[4])-ord("A")][1]=True
-				Circuito_1[ID].append(termos[4])	
-				Circuito_1[ord(termos[4])-ord("A")][1]=True
-				sinal_E.append(termos[4])
-		f.close()
-
-		# Leitura do sinais de entrada
-		f = open(dir_circ[0] + 'estimulos.txt', 'r')
-
-		for x in sinal_S:
-			if (x in sinal_E):
-				sinal_E.remove(x)
-
-		aux = 0;
-		for line in f:
-			if ("+"in line):
-
-				# Identificar se todos os sinais de entradas estão ativos
-				# Senão configura para o valor 0
-				aux+=1
-				if (aux == 1):
-					for x in sinal_E:
-						muda = True
-						for y in sinais:
-							if (x in y):
-								muda = False
-						if (muda):		
-							sinais.append([x,0])
+			sinal_E = []
+			sinal_S = []
 
 
-				# Identificando o avanço de tempo
-				for x in range (int(line[1::])):
-					sinais.append(1)
-			else:	
+			# Leitura do circuito
+			f = open(dir_circ[0] + 'circuito.hdl', 'r')
+
+			for line in f:
 				termos = line.split();
 
-				# Interpretando a notação simplificada
-				entrada = list(termos[0])
-				sinal = list(termos[2])
+				# Leitura sinal de saida
+				ID = ord(termos[0])-ord("A")
+				sinal_S.append(termos[0])
+				if (termos[0] in sinal_E):
+					sinal_E.remove(termos[0])
 
-				for x in range(len(entrada)):
-					sinais.append([entrada[x],int(sinal[x])])
-		f.close()
+				# Leitura da porta
+				Circuito_0[ID].append(termos[2])	
+				Circuito_0[ID][0]=True
+				Circuito_0[ID][1]=True
+				Circuito_1[ID].append(termos[2])	
+				Circuito_1[ID][0]=True
+				Circuito_1[ID][1]=True
 
-		sinais_1 = sinais.copy()
+				# Leitura da primeira entrada
+				Circuito_0[ID].append(termos[3])							
+				Circuito_0[ord(termos[3])-ord("A")][1]=True
+				Circuito_1[ID].append(termos[3])							
+				Circuito_1[ord(termos[3])-ord("A")][1]=True
+				sinal_E.append(termos[3])
 
-		atraso_0(dir_circ[0],Circuito_0,sinais)
-		atraso_1(dir_circ[0],Circuito_1,sinais_1)
+				# Leitura condicional da segunda entrada
+				if (termos[2]!= "NOT"): 
+					Circuito_0[ID].append(termos[4])	
+					Circuito_0[ord(termos[4])-ord("A")][1]=True
+					Circuito_1[ID].append(termos[4])	
+					Circuito_1[ord(termos[4])-ord("A")][1]=True
+					sinal_E.append(termos[4])
+			f.close()
+
+			# Leitura do sinais de entrada
+			f = open(dir_circ[0] + 'estimulos.txt', 'r')
+
+			for x in sinal_S:
+				if (x in sinal_E):
+					sinal_E.remove(x)
+
+			aux = 0;
+			for line in f:
+				if ("+"in line):
+
+					'''
+
+					# Identificar se todos os sinais de entradas estão ativos
+					# Senão configura para o valor 0
+					aux+=1
+					if (aux == 1):
+						for x in sinal_E:
+							muda = True
+							for y in sinais:
+								if (x in y):
+									muda = False
+							if (muda):		
+								sinais.append([x,0])
+					'''
 
 
+					# Identificando o avanço de tempo
+					for x in range (int(line[1::])):
+						sinais.append(1)
+				else:	
+					termos = line.split();
+
+					# Interpretando a notação simplificada
+					entrada = list(termos[0])
+					sinal = list(termos[2])
+
+					for x in range(len(entrada)):
+						sinais.append([entrada[x],int(sinal[x])])
+			f.close()
+
+			sinais_1 = sinais.copy()
+
+			atraso_0(dir_circ[0],Circuito_0,sinais)
+			atraso_1(dir_circ[0],Circuito_1,sinais_1)
+
+			print("Simulação do diretório:",dir_circ,"concluida com sucesso")
+
+		except :
+			print("Falha ao abrir os arquivos circuito.hdl e estimulos.txt do diretório:", dir_circ)
+			pass
+		
 
 if __name__ == "__main__":
     main()

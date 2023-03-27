@@ -1,0 +1,11 @@
+A = NAND C B
+B = NAND A D
+C = AND E Z 
+D = AND Z G
+E = NOT G
+G = NAND I H
+H = NAND G J
+I = AND K F 
+J = AND F L
+K = NOT L
+F = NOT Z
