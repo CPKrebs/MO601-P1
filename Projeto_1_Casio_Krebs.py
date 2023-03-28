@@ -27,9 +27,6 @@ def XOR (a, b):
 	else:		return 0
 
 
-
-
-
 #########################################################
 #
 #
@@ -84,14 +81,6 @@ def atraso_0(DIR,Circuito_0,sinais):
 				valido.append([Circuito_0[y][2],Circuito_0[y][4],Circuito_0[y][5]])
 
 	w.writerow(linha)
-
-	# Realiza uma primeira passagem pelas portas para verificar 
-	# se alguma porta é afetada pelos sinais intermediários
-	for aux in (valido):
-		for portas in (valido):
-			saida = atraso_0_aux(portas,Circuito_0)
-			ID_saida = ord(portas[0])-ord("A")
-			Circuito_0[ID_saida][3] = saida
 
 	# Inicializa o contador de relógio
 	Tempo = 0
@@ -199,16 +188,6 @@ def atraso_1(DIR,Circuito_1,sinais):
 				valido.append([Circuito_1[y][2],Circuito_1[y][4],Circuito_1[y][5]])
 	w.writerow(linha)
 
-	
-	# Realiza uma primeira passagens pelas portas para verificar 
-	# se alguma porta é afetada pelos sinais intermediários
-	for aux in (valido):
-		for portas in (valido):
-			saida = atraso_1_aux(portas,Circuito_1)
-			ID_saida = ord(portas[0])-ord("A")
-			Circuito_1[ID_saida][3] = saida
-	
-
 	# Inicializa o contador de relógio
 	Tempo = 0
 
@@ -229,8 +208,6 @@ def atraso_1(DIR,Circuito_1,sinais):
 
 		# Avanço no tempo
 		else:
-			print(Modificado)
-
 			print_linha_1(Tempo,w,Circuito_1)
 
 			Tempo +=1
@@ -387,23 +364,6 @@ def main():
 			aux = 0;
 			for line in f:
 				if ("+"in line):
-
-					'''
-
-					# Identificar se todos os sinais de entradas estão ativos
-					# Senão configura para o valor 0
-					aux+=1
-					if (aux == 1):
-						for x in sinal_E:
-							muda = True
-							for y in sinais:
-								if (x in y):
-									muda = False
-							if (muda):		
-								sinais.append([x,0])
-					'''
-
-
 					# Identificando o avanço de tempo
 					for x in range (int(line[1::])):
 						sinais.append(1)
