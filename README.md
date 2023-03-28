@@ -1,7 +1,25 @@
 # MO601-P1
 
 Doutorando: Casio Pacheco Krebs
+
 RA: 264953
+
+O objetivo deste projeto é implementar um simulador de circuitos lógicos, que permita gerar o histórico dos valores dos sinais de entrada e de saída para cada porta lógica. Onde serão projetados dois fluxos de simulação, o primeiro considerando que o tempo de propagação da resposta a partir da variação de alguns dos sinais de entrada seja de 0 ciclos, e outro sendo de 1 ciclo de atraso.
+
+
+# Clonar repositório
+
+Para clonar o repositório, utilize o comando abaixo:
+
+```
+git clone https://github.com/CPKrebs/MO601-P1.git
+```
+
+
+# Preparação dos circuitos
+
+Antes de realizar a construção da imagem Docker, é necessário realizar a cópia dos novos testes de simulação dentro da pasta "test".
+
 
 # Configuração do Docker
 
@@ -23,17 +41,8 @@ docker run -d --name casio_p1_exec casio_p1
 
 # Coleta de resultados
 
-Primeiramente é necessario deletar a pasta ```test```, a fim de evitar conflito durante a copia dos dados, a partir do comando ```rm```: 
+Para realizar as copias dos dados de saida, é utilizado o comando ```docker cp```.
 
 ```
-rm -R test/
+docker cp casio_p1_exec:/test/. test/.
 ```
-
-
-
-Por fim, para realizar as copias dos dados de saida, é utilizado o comando ```docker cp```.
-
-```
-docker cp casio_p1_exec:/test test/
-```
-
