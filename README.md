@@ -13,6 +13,7 @@ Para clonar o repositório, utilize o comando abaixo:
 
 ```
 git clone https://github.com/CPKrebs/MO601-P1.git
+cd MO601-P1/
 ```
 
 
@@ -34,7 +35,7 @@ docker build -t casio_p1 .
 Modificar o nome do docker, com a flag ```--name```, a partir do comando ```run```: 
 
 ```
-docker run -d --name casio_p1_exec casio_p1
+docker run --name casio_p1_exec casio_p1
 ```
 
 
